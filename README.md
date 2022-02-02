@@ -14,15 +14,15 @@ Failover setup for a Debian based router.
 The Simcom LTE module needs a configuration which can be done with
 just
 
-echo Y > /sys/class/net/wwan0/qmi/raw_ip
+```echo Y > /sys/class/net/wwan0/qmi/raw_ip```
 
 Or rather, assuming the module's interface is wwan0:
 
-ip link set wwan0 down ; echo Y > /sys/class/net/wwan0/qmi/raw_ip ; ip link set wwan0 up
+```ip link set wwan0 down ; echo Y > /sys/class/net/wwan0/qmi/raw_ip ; ip link set wwan0 up```
 
 At boot time this can be done with a udev rule like this:
 
-ACTION=="add", SUBSYSTEM=="net", ATTR{qmi/raw_ip}=="*", ATTR{qmi/raw_ip}="Y"
+```ACTION=="add", SUBSYSTEM=="net", ATTR{qmi/raw_ip}=="*", ATTR{qmi/raw_ip}="Y"```
 
 The installer script puts this udev rule in /etc/udev/rules.d/simcom.rules.
 
@@ -32,20 +32,18 @@ If everything is fine and the Simcom module works and has been set to
 raw_ip mode as above, you an connect with first running qmicli and
 then configure the interface with udhcpc.
 
-qmicli --device=/dev/cdc-wdm0 --device-open-proxy --wds-start-network="ip-type=4,apn=insert_your_APN_HERE" --client-no-release-cid
+```qmicli --device=/dev/cdc-wdm0 --device-open-proxy --wds-start-network="ip-type=4,apn=insert_your_APN_HERE" --client-no-release-cid```
 
 You have to replace insert_your_APN_HERE with your APN, which you can
 find out from your telco.
 
 In practise, it's convenient to also enable auto-connect:
 
-qmicli --device=$LTE_DEV --device-open-proxy \
-	   --wds-set-autoconnect-settings=enabled,home-only \
-	   --client-no-release-cid
+```qmicli --device=/dev/cdc-wdm0 --device-open-proxy --wds-set-autoconnect-settings=enabled,home-only --client-no-release-cid```
 
-And then:
+And then run:
 
-udhcpc -i wwan0
+```udhcpc -i wwan0```
 
 Apparently other DHCP clients refuse to work with this kind of
 interface. I've tried dhcpcd, dhclient and systemd-networkd but
@@ -80,6 +78,12 @@ back.
 A systemd service to start the failover.sh script is included in
 failover.service.
 
+### installer script
+I've included an installer script which does just a few things:
+- Copies systemd service files lte_manage.service and failover.service in /etc/systemd/system and enables them. Services are not started.
+- Copies failover.sh and lte_manage.sh to /usr/local/bin.
+- Copies simcom.rules to /etc/udev/rules.d/ and reloads udev rules.
+
 ### Firewall
 
 I've included an example nftables firewall in nftables.conf. Very
@@ -101,3 +105,5 @@ dnsmasq and there I've specified Cloudflare's public DNS servers
 
 dnsmasq can be told what DNS servers to use over dbus so this could be
 done by the failover script if needed.
+
+
