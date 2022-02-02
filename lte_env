@@ -1,0 +1,2 @@
+IF_LTE=wwan0
+IF_WAN=enp1s0
