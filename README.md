@@ -79,7 +79,7 @@ A systemd service to start the failover.sh script is included in
 failover.service.
 
 ### installer script
-I've included an installer script which does just a few things:
+I've included an installer script (installer.sh) which does just a few things:
 - Copies systemd service files lte_manage.service and failover.service in /etc/systemd/system and enables them. Services are not started.
 - Copies failover.sh and lte_manage.sh to /usr/local/bin.
 - Copies simcom.rules to /etc/udev/rules.d/ and reloads udev rules.
