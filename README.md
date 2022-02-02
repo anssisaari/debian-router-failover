@@ -1,5 +1,8 @@
 # debian-router-failover
-Failover setup for a Debian based router.
+Failover to LTE setup for a Debian based router.
+
+### General
+This is a failover setup for a router running Debian Linux and using a Simcom LTE module as a failover interface. It should be adaptable for other configurations as well but this is the hardware I have.
 
 ### Hardware
 - APU2 (APU4D4, 120 GB mSATA SSD, case, PSU, USB to DB9F serial cable)
@@ -78,7 +81,13 @@ back.
 A systemd service to start the failover.sh script is included in
 failover.service.
 
-### installer script
+### Files that likely need editing
+- lte_env: edit for your main (IF_WAN) interface and failover interface (IF_LTE)
+- lte_manage.service: 
+  - Environment="LTE_DEV=/dev/cdc-wdm0" - edit to match your device.
+  - Environment="LTE_APN=internet.saunalahti" - edit to match your APN.
+
+### Installer script
 I've included an installer script (installer.sh) which does just a few things:
 - Copies systemd service files lte_manage.service and failover.service in /etc/systemd/system and enables them. Services are not started.
 - Copies failover.sh and lte_manage.sh to /usr/local/bin.
