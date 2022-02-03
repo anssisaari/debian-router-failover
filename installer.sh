@@ -1,11 +1,5 @@
 #! /bin/sh
 
-if [[ "$UID" -ne 0 ]]
-then
-    echo "Run as root please."
-    exit
-fi
-
 # params: $1 file name, $2 target dir, $3 perms
 condcopy () {
     if [[ ! -d "$2" ]]
