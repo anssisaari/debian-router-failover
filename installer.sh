@@ -30,6 +30,7 @@ condcopy lte_env /etc/systemd/system 644
 # scripts 
 condcopy lte_manage.sh /usr/local/bin 755
 condcopy failover.sh /usr/local/bin 755
+condcopy lte.script /etc/udhcpc 755
 
 # udev rule
 condcopy simcom.rules /etc/udev/rules.d 644
