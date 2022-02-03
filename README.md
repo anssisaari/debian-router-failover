@@ -4,10 +4,10 @@ Failover to LTE setup for a Debian based router.
 ### General
 This is a failover setup for a router running Debian Linux and using a Simcom LTE module as a failover interface. It should be adaptable for other configurations as well but this is the hardware I have.
 
-If you don't have an LTE device at all or your LTE device is different from mine, then mostly you just need the failover script.
+If you don't have an LTE device at all or your LTE device is different from mine, then mostly you just need the failover script. The LTE stuff was the hard part for me as I knew very little about it beforehand.
 
 ### Hardware
-- APU2 (APU4D4, 120 GB mSATA SSD, case, PSU, USB to DB9F serial cable)
+- PC Engines APU2 (APU4D4, 120 GB mSATA SSD, case, PSU, USB to DB9F serial cable)
 - Simcom SIM7600G-H LTE kit + 4G/LTE antenna with a pigtail cable
 
 ### Debian non-default packages needed
