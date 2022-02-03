@@ -4,6 +4,8 @@ Failover to LTE setup for a Debian based router.
 ### General
 This is a failover setup for a router running Debian Linux and using a Simcom LTE module as a failover interface. It should be adaptable for other configurations as well but this is the hardware I have.
 
+If you don't have an LTE device at all or your LTE device is different from mine, then mostly you just need the failover script.
+
 ### Hardware
 - APU2 (APU4D4, 120 GB mSATA SSD, case, PSU, USB to DB9F serial cable)
 - Simcom SIM7600G-H LTE kit + 4G/LTE antenna with a pigtail cable
@@ -60,15 +62,13 @@ There is a script called lte_manage.sh which just runs qmicli and
 udhcpc so that the LTE module connects and disconnects. The installer
 will place this in /usr/local/bin. There's also a simple systemd
 service to run it, which the installer will copy to
-/etc/systemd/system and enable and start.
+/etc/systemd/system.
 
 ### Failover script
 
 Failover script is called failover.sh. It's from https://www.linuxized.com/2022/01/automatic-internet-failover-to-lte-or-another-interface/. 
 
-There are a couple parameters to edit at the top of the script,
-IF_MAIN and IF_FAILOVER. In my case, IF_MAIN is enp1s0 which is the
-default and IF_FAILOVER is wwan0. 
+I have made a minor modification to it, it takes the main and failover interface names from the systemd service as environment variables.
 
 Basically failover.sh pings some hosts and if there's no response
 through the main interface, it switches over to the failover
@@ -84,7 +84,7 @@ failover.service.
 ### Files that likely need editing
 - lte_env: edit for your main (IF_WAN) interface and failover interface (IF_LTE)
 - lte_manage.service: 
-  - Environment="LTE_DEV=/dev/cdc-wdm0" - edit to match your device.
+  - Environment="LTE_DEV=/dev/cdc-wdm0" - edit to match your device if this isn't it.
   - Environment="LTE_APN=internet.saunalahti" - edit to match your APN.
 
 ### Installer script
