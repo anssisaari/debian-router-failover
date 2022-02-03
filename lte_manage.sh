@@ -8,9 +8,6 @@ lte_enable ()
     # Turn on auto-connect since apparently at boot time it's not always for sure
     # that we can connect. Roaming is turned off just in case.
 
-    # TODO: how to handle these continuation lines with indentation?
-    # Might actually be OK?
-    
     qmicli --device=$LTE_DEV --device-open-proxy \
 	   --wds-set-autoconnect-settings=enabled,home-only \
 	   --client-no-release-cid
