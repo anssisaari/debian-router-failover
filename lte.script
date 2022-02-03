@@ -1,0 +1,58 @@
+#!/bin/sh
+# Busybox udhcpc dispatcher script.
+# Copyright (C) 2009 by Axel Beckert.
+# Copyright (C) 2014 by Michael Tokarev.
+#
+# Based on the busybox example scripts and the old udhcp source
+# package default.* scripts.
+
+IF_FAILOVER="wwan0"
+METRIC_FAILOVER_OFF="99999"
+
+log() {
+    logger -t "udhcpc[$PPID]" -p daemon.$1 "$interface: $2"
+}
+
+case $1 in
+    bound|renew)
+
+	# Configure new IP address.
+	# Do it unconditionally even if the address hasn't changed,
+	# to also set subnet, broadcast, mtu, ...
+	# Anssi: this actually ships with udhcpc in Debian. Problem is,
+	# if you get mtu it won't work... Should fix that.
+	busybox ifconfig $interface ${mtu:+mtu $mtu} \
+	    $ip netmask $subnet ${broadcast:+broadcast $broadcast}
+
+	# Anssi: let's do the route unconditionally too.
+	# Wipe any extra routes like the original script did:
+	router="${router%% *}"
+
+	# Don't bother with routes if we didn't get one
+	if [ -n "$router" ]
+	then
+		# Flush:
+		busybox ip -4 route flush exact 0.0.0.0/0 dev $interface
+		# And add with our desired metric:
+		busybox ip -4 route add default via $router dev $interface metric 99999
+	fi
+	
+	log info "$1: IP=$ip/$subnet router=$router domain=\"$domain\" dns=\"$dns\" lease=$lease"
+	;;
+
+    deconfig)
+	busybox ip link set $interface up
+	busybox ip -4 addr flush dev $interface
+	busybox ip -4 route flush dev $interface
+	log notice "deconfigured"
+	;;
+
+    leasefail | nak)
+	log err "configuration failed: $1: $message"
+	;;
+
+    *)
+	echo "$0: Unknown udhcpc command: $1" >&2
+	exit 1
+	;;
+esac
