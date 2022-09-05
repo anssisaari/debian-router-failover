@@ -2,13 +2,13 @@
 
 # params: $1 file name, $2 target dir, $3 perms
 condcopy () {
-    if [[ ! -d "$2" ]]
+    if [ ! -d "$2" ]
     then
 	echo $2 doesn\'t exist, not creating.
 	return
     fi
 
-    if [[ ! -f $2/$1 ]]
+    if [ ! -f $2/$1 ]
     then
 	install --mode=$3 $1 $2
     else
