@@ -60,7 +60,7 @@ indeed it doesn't seem to have one.
 
 ### Automatic configuration of LTE
 
-There is a script called lte_manage.sh which just runs qmicli and
+There is a script called lte_manage.sh which just runs qmi-network and
 udhcpc so that the LTE module connects and disconnects. The installer
 will place this in /usr/local/bin. There's also a simple systemd
 service to run it, which the installer will copy to
@@ -69,6 +69,14 @@ service to run it, which the installer will copy to
 udhcpc also uses an external script which I've modified since what's shipped with udhcpc seemed to sometimes create two routes
 through the wwan0 interface. It's not a problem as such but the failover script is unable to handle that. Installer copies this script, called lte.script,
 to /etc/udhcpc.
+
+N.B. lte_manage.sh expects the directory /run/udhcpc to exist. The systemd way to make sure of this is to use tmpfiles.d and add a file
+to /etc/tmpfiles.d which specifies this, for example like this:
+
+``` 
+#Type Path              Mode User          Group         Age         Argument
+d     /run/udhcpc       0755 root          root          -           -
+```
 
 ### Failover script
 
