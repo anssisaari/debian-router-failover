@@ -46,6 +46,8 @@ In practise, it's convenient to also enable auto-connect:
 
 ```qmicli --device=/dev/cdc-wdm0 --device-open-proxy --wds-set-autoconnect-settings=enabled,home-only --client-no-release-cid```
 
+Alternatively, there's also a script called qmi-network in the libqmi-utils package which manages the connection without the need to call qmicli directly. It uses a config file, **/etc/qmi-network.conf** where you can specify the cell network APN. I've added an example of this configuration file.
+
 And then run:
 
 ```udhcpc -i wwan0```
@@ -101,7 +103,7 @@ I've included an installer script (installer.sh) which does just a few things:
 
 I've included an example nftables firewall in nftables.conf. Very
 typical masquerading firewall except for one thing. At the end, in the
-postrouting chaing, it masquerades two interfaces. We need this so
+postrouting chain, it masquerades two interfaces. We need this so
 that we can use our two interfaces.
 
 ### IP forwarding
