@@ -2,10 +2,7 @@
 Description=Connect or disconnect LTE module to/from the cellular network
 
 [Service]
-#Environment="LTE_IF=wwan0"
 EnvironmentFile=/etc/systemd/system/lte_env
-Environment="LTE_DEV=/dev/cdc-wdm0"
-Environment="LTE_APN=internet.saunalahti"
 
 Type=exec
 RemainAfterExit=Yes

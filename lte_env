@@ -1,2 +1,4 @@
 IF_LTE=wwan0
 IF_WAN=enp1s0
+LTE_DEV=/dev/cdc-wdm0
+LTE_APN=internet.saunalahti
